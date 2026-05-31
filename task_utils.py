@@ -1,17 +1,14 @@
 from datetime import datetime
-# Import validation functions
 from task_manager.validation import validate_task_title, validate_task_description, validate_due_date
 
-# Define tasks list
 tasks = []
 
-# Implemented add_task function
 def add_task(title, description, due_date):
-    if not validate_task_title(title):
+    if validate_task_title(title) == False:
         return
-    if not validate_task_description(description):
+    if validate_task_description(description) == False:
         return
-    if not validate_due_date(due_date):
+    if validate_due_date(due_date) == False:
         return
         
     task = {
@@ -23,33 +20,38 @@ def add_task(title, description, due_date):
     tasks.append(task)
     print("Task added successfully!")
 
-# Implemented mark_task_as_complete function
 def mark_task_as_complete(index, tasks=tasks):
-    try:
-        idx = int(index) - 1
-        if 0 <= idx < len(tasks):
-            tasks[idx]["completed"] = True
-            print("Task marked as complete!")
-        else:
-            print("Error: Invalid task index.")
-    except ValueError:
-        print("Error: Please enter a valid numerical index.")
+    idx = int(index) - 1
+    task = tasks[idx]
+    task["completed"] = True
+    print("Task marked as complete!")
 
-# Implemented view_pending_tasks function
 def view_pending_tasks(tasks=tasks):
-    pending_tasks = [t for t in tasks if not t["completed"]]
-    if not pending_tasks:
+    # Check if there are any pending tasks first
+    has_pending = False
+    for t in tasks:
+        if t["completed"] == False:
+            has_pending = True
+            
+    if has_pending == False:
         print("No pending tasks currently.")
         return
-        
-    for i, task in enumerate(tasks):
-        if not task["completed"]:
-            print(f"{i + 1}. [{task['title']}] {task['description']} (Due: {task['due_date']})")
 
-# Implemented calculate_progress function
+    # Print the pending tasks with a simple counter loop
+    counter = 1
+    for t in tasks:
+        if t["completed"] == False:
+            print(str(counter) + ". [" + t["title"] + "] " + t["description"] + " (Due: " + t["due_date"] + ")")
+        counter = counter + 1
+
 def calculate_progress(tasks=tasks):
-    if not tasks:
+    if len(tasks) == 0:
         return 0.0
-    completed_count = sum(1 for t in tasks if t["completed"])
+        
+    completed_count = 0
+    for t in tasks:
+        if t["completed"] == True:
+            completed_count = completed_count + 1
+            
     progress = (completed_count / len(tasks)) * 100
     return progress

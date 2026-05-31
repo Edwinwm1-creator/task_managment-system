@@ -1,7 +1,5 @@
-# Import functions from task_manager.task_utils package
 from task_manager.task_utils import add_task, mark_task_as_complete, view_pending_tasks, calculate_progress
 
-# Define the main function
 def main():
     while True:
         print("Task Management System")
@@ -10,7 +8,8 @@ def main():
         print("3. View Pending Tasks")
         print("4. View Progress")
         print("5. Exit")
-        choice = input("Enter your choice (1-5): ")
+        
+        choice = input()
         
         if choice == "1":
             title = input()
@@ -27,7 +26,7 @@ def main():
             
         elif choice == "4":
             progress = calculate_progress()
-            print(f"Current Progress: {progress:.2f}%")
+            print("Current Progress: " + str(progress) + "%")
             
         elif choice == "5":
             print("Exiting the program...")
